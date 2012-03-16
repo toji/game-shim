@@ -1,7 +1,7 @@
 /**
  * @fileoverview game-shim - Shims to normalize gaming-related APIs to their respective specs
  * @author Brandon Jones
- * @version 0.2
+ * @version 0.3
  */
 
 /*
@@ -32,6 +32,14 @@
 
     var elementPrototype = (global.HTMLElement || global.Element)["prototype"];
     var getter;
+
+    var GameShim = global.GameShim = {
+        supports: {
+            fullscreen: true,
+            pointerLock: true,
+            gamepad: true
+        }
+    };
     
     //=====================
     // Animation
@@ -58,7 +66,7 @@
             window.requestAnimationFrame = function(callback, element) {
                 var currTime = new Date().getTime();
                 var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                var id = window.setTimeout(function() { callback(timeToCall); },
+                var id = window.setTimeout(function() { callback(currTime + timeToCall); },
                   timeToCall);
                 lastTime = currTime + timeToCall;
                 return id;
@@ -93,6 +101,8 @@
             if("mozFullScreen" in document) {
                 return function() { return document.mozFullScreen; };
             }
+
+            GameShim.supports.fullscreen = false;
             return function() { return false; }; // not supported, never fullscreen
         })();
         
@@ -213,6 +223,8 @@
                     return function() { return navigator.pointer.islocked(); };
                 }
             }
+
+            GameShim.supports.pointerLock = false;
             return function() { return false; }; // not supported, never locked
         })();
         
@@ -283,6 +295,7 @@
                 return function() { return navigator.mozGamepads; };
             }
             
+            GameShim.supports.gamepad = false;
             var gamepads = [];
             return function() { return gamepads; }; // not supported, return empty array
         })();
