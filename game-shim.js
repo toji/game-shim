@@ -92,7 +92,9 @@
             } else {
                 animationStartTime = function() { return window[prop]; };
             }
-            window.__defineGetter__('animationStartTime', animationStartTime);
+            if(window.__defineGetter__) {
+                window.__defineGetter__('animationStartTime', animationStartTime);
+            }
         }
     }());
     
