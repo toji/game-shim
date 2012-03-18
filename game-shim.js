@@ -78,14 +78,23 @@
                 clearTimeout(id);
             };
         }
+        
+        // window.animationStartTime
+        if(!window.animationStartTime) {
+            var prop;
+            for(x = 0; x < vendors.length && !window[prop]; ++x) {
+                prop = vendors[x] + 'AnimationStartTime';
+            }
+            
+            var animationStartTime;
+            if(!window[prop]) {
+                animationStartTime = function() { return +new Date; };
+            } else {
+                animationStartTime = function() { return window[prop]; };
+            }
+            window.__defineGetter__('animationStartTime', animationStartTime);
+        }
     }());
-    
-    // window.animationStartTime
-    if(!window.animationStartTime) {
-        window.animationStartTime = window.webkitAnimationStartTime ||
-        window.mozAnimationStartTime ||
-        new Date().getTime();
-    }
     
     //=====================
     // Fullscreen
