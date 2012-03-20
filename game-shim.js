@@ -1,7 +1,7 @@
 /**
  * @fileoverview game-shim - Shims to normalize gaming-related APIs to their respective specs
  * @author Brandon Jones
- * @version 0.3
+ * @version 0.4
  */
 
 /*
@@ -84,7 +84,7 @@
             getter = (function() {
                 for(x = 0; x < vendors.length; ++x) {
                     if(window[vendors[x] + "AnimationStartTime"]) {
-                        return window[vendors[x] + "AnimationStartTime"];
+                        return function() { return window[vendors[x] + "AnimationStartTime"]; };
                     }
                 }
 
