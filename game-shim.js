@@ -1,7 +1,7 @@
 /**
  * @fileoverview game-shim - Shims to normalize gaming-related APIs to their respective specs
  * @author Brandon Jones
- * @version 0.4
+ * @version 0.5
  */
 
 /*
@@ -169,9 +169,14 @@
                     this.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
                 };
             }
+
+            if(elementPrototype.mozRequestFullScreen) {
+                return function() {
+                    this.mozRequestFullScreen();
+                };
+            }
             
-            return  elementPrototype.mozRequestFullScreen ||
-                    function(){ /* unsupported, fail silently */ };
+            return function(){ /* unsupported, fail silently */ };
         })();
     }
     
@@ -185,7 +190,7 @@
     }
     
     //=====================
-    // Mouse Lock
+    // Pointer Lock
     //=====================
     
     var mouseEventPrototype = global.MouseEvent.prototype;
@@ -209,7 +214,27 @@
     if(!navigator.pointer) {
         navigator.pointer = navigator.webkitPointer || navigator.mozPointer;
     }
-    
+
+    // Document event: pointerlockchange
+    function pointerlockchange(oldEvent) {
+        var newEvent = document.createEvent("CustomEvent");
+        newEvent.initCustomEvent("pointerlockchange", true, false, null);
+        document.dispatchEvent(newEvent);
+    }
+    document.addEventListener("webkitpointerlockchange", pointerlockchange, false);
+    document.addEventListener("webkitpointerlocklost", pointerlockchange, false);
+    document.addEventListener("mozpointerlockchange", pointerlockchange, false);
+    document.addEventListener("mozpointerlocklost", pointerlockchange, false);
+
+    // Document event: pointerlockerror
+    function pointerlockerror(oldEvent) {
+        var newEvent = document.createEvent("CustomEvent");
+        newEvent.initCustomEvent("pointerlockerror", true, false, null);
+        document.dispatchEvent(newEvent);
+    }
+    document.addEventListener("webkitpointerlockerror", pointerlockerror, false);
+    document.addEventListener("mozpointerlockerror", pointerlockerror, false);
+
     // document.pointerLockEnabled
     if(!document.hasOwnProperty("pointerLockEnabled")) {
         getter = (function() {
@@ -272,7 +297,7 @@
                     function(){
                         if(navigator.pointer) {
                             var elem = this;
-                            navigator.pointer.lock(elem);
+                            navigator.pointer.lock(elem, pointerlockchange, pointerlockerror);
                         }
                     };
         })();
