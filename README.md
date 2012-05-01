@@ -10,4 +10,5 @@ APIs Covered
  - fullscreen
  - mouselock
  - gamepad
+ - high-resolution timers
 
