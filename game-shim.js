@@ -103,15 +103,15 @@
     // Fullscreen
     //=====================
     
-    // document.isFullScreen
+    // document.fullscreenEnabled
     if(!document.hasOwnProperty("fullscreenEnabled")) {
         getter = (function() {
             // These are the functions that match the spec, and should be preferred
             if("webkitIsFullScreen" in document) {
-                return function() { return document.webkitIsFullScreen; };
+                return function() { return webkitRequestFullScreen in document; };
             }
-            if("mozFullScreen" in document) {
-                return function() { return document.mozFullScreen; };
+            if("mozFullScreenEnabled" in document) {
+                return function() { return document.mozFullScreenEnabled; };
             }
 
             GameShim.supports.fullscreen = false;
