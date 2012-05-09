@@ -235,40 +235,6 @@
     }
     document.addEventListener("webkitpointerlockerror", pointerlockerror, false);
     document.addEventListener("mozpointerlockerror", pointerlockerror, false);
-
-    // document.pointerLockEnabled
-    if(!document.hasOwnProperty("pointerLockEnabled")) {
-        getter = (function() {
-            // These are the functions that match the spec, and should be preferred
-            if("webkitPointerLockEnabled" in document) {
-                return function() { return document.webkitPointerLockEnabled; };
-            }
-            if("mozPointerLockEnabled" in document) {
-                return function() { return document.mozPointerLockEnabled; };
-            }
-    
-            // Early versions of the spec managed mouselock through the pointer object
-            if(navigator.pointer) {
-                if(typeof(navigator.pointer.isLocked) === "boolean") {
-                    // Chrome initially launched with this interface
-                    return function() { return navigator.pointer.isLocked; };
-                } else if(typeof(navigator.pointer.isLocked) === "function") {
-                    // Some older builds might provide isLocked as a function
-                    return function() { return navigator.pointer.isLocked(); };
-                } else if(typeof(navigator.pointer.islocked) === "function") {
-                    // For compatibility with early Firefox build
-                    return function() { return navigator.pointer.islocked(); };
-                }
-            }
-
-            return function() { return !!document.pointerLockElement; };
-        })();
-        
-        Object.defineProperty(document, "pointerLockEnabled", {
-            enumerable: true, configurable: false, writeable: false,
-            get: getter
-        });
-    }
     
     if(!document.hasOwnProperty("pointerLockElement")) {
         getter = (function() {
