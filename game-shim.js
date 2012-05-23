@@ -127,11 +127,13 @@
     if(!document.hasOwnProperty("fullscreenElement")) {
         getter = (function() {
             // These are the functions that match the spec, and should be preferred
-            if("webkitFullscreenElement" in document) {
-                return function() { return document.webkitFullscreenElement; };
-            }
-            if("mozFullScreenElement" in document) {
-                return function() { return document.mozFullScreenElement; };
+            var i=0, name=["webkitCurrentFullScreenElement", "webkitFullscreenElement", "mozFullScreenElement"];
+            for (; i<name.length; i++)
+            {
+                if (name[i] in document)
+                {
+                    return function() { return document[name[i]]; };
+                }
             }
             return function() { return null; }; // not supported
         })();
