@@ -187,6 +187,7 @@
     if(!document.exitFullscreen) {
         document.exitFullscreen = (function() {
             return  document.webkitExitFullscreen ||
+                    document.webkitCancelFullScreen ||
                     document.mozCancelFullScreen ||
                     function(){ /* unsupported, fail silently */ };
         })();
