@@ -108,7 +108,7 @@
         getter = (function() {
             // These are the functions that match the spec, and should be preferred
             if("webkitIsFullScreen" in document) {
-                return function() { return webkitRequestFullScreen in document; };
+                return function() { return document.webkitFullscreenEnabled; };
             }
             if("mozFullScreenEnabled" in document) {
                 return function() { return document.mozFullScreenEnabled; };
