@@ -164,8 +164,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
     document.addEventListener("mozfullscreenerror", fullscreenerror, false);
     
     // element.requestFullScreen
-    if(!elementPrototype.requestFullscreen) {
-        elementPrototype.requestFullscreen = (function() {
+    if(!elementPrototype.requestFullScreen) {
+        elementPrototype.requestFullScreen = (function() {
             if(elementPrototype.webkitRequestFullScreen) {
                 return function() {
                     this.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
@@ -182,10 +182,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
         })();
     }
     
-    // document.exitFullscreen
-    if(!document.exitFullscreen) {
-        document.exitFullscreen = (function() {
-            return  document.webkitExitFullscreen ||
+    // document.cancelFullScreen
+    if(!document.cancelFullScreen) {
+        document.cancelFullScreen = (function() {
+            return  document.webkitCancelFullScreen ||
                     document.mozCancelFullScreen ||
                     function(){ /* unsupported, fail silently */ };
         })();
