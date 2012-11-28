@@ -1,7 +1,7 @@
 /**
  * @fileoverview game-shim - Shims to normalize gaming-related APIs to their respective specs
  * @author Brandon Jones
- * @version 1.0
+ * @version 1.1
  */
 
 /* Copyright (c) 2012, Brandon Jones. All rights reserved.
