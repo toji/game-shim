@@ -1,7 +1,7 @@
 /**
  * @fileoverview game-shim - Shims to normalize gaming-related APIs to their respective specs
  * @author Brandon Jones
- * @version 1.1
+ * @version 1.2
  */
 
 /* Copyright (c) 2012, Brandon Jones. All rights reserved.
@@ -301,25 +301,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
     // Gamepad
     //=====================
     
-    if(!navigator.gamepads) {
-        getter = (function() {
+    // NOTE: This API is still very much in flux!
+    // See https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html for latest spec proposal
+    if(!navigator.getGamepads) {
+        navigator.getGamepads = (function() {
             // These are the functions that match the spec, and should be preferred
+            if("webkitGetGamepads" in navigator) {
+                return navigator.webkitGetGamepads;
+            }
+            if("mozGetGamepads" in navigator) {
+                return navigator.mozGetGamepads;
+            }
+
+            // Older property-based methods
             if("webkitGamepads" in navigator) {
                 return function() { return navigator.webkitGamepads; };
             }
             if("mozGamepads" in navigator) {
                 return function() { return navigator.mozGamepads; };
             }
-            
+
+            // Not supported, return empty array
             GameShim.supports.gamepad = false;
             var gamepads = [];
-            return function() { return gamepads; }; // not supported, return empty array
+            return function() { return gamepads; };
         })();
-        
-        Object.defineProperty(navigator, "gamepads", {
-            enumerable: true, configurable: false, writeable: false,
-            get: getter
-        });
     }
 
     //=======================
